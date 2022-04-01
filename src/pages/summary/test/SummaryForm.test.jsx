@@ -1,7 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import SummaryForm from "../SummaryForm";
 import userEvent from "@testing-library/user-event";
-import { queryByText } from "@testing-library/dom";
 
 describe("Form Tests", () => {
   it("should render checkbox and button in inital state", () => {
@@ -33,14 +36,14 @@ describe("Form Tests", () => {
     expect(confirmButton).toBeDisabled();
   });
 
-  it("should have a popover appear upon hover", () => {
+  it("should have a popover appear upon hover", async () => {
     render(<SummaryForm />);
 
     const nullPopover = screen.queryByText(
       /no ice cream will actually be delivered/i
     );
+    expect(nullPopover).not.toBeInTheDocument();
 
-    expect(nullPopover).toBeNull();
     const termsAndConditions = screen.getByText(/terms and conditions/i);
     userEvent.hover(termsAndConditions);
 
@@ -50,9 +53,8 @@ describe("Form Tests", () => {
     expect(popover).toBeInTheDocument();
 
     userEvent.unhover(termsAndConditions);
-    const nullPopoverAgain = screen.queryByText(
-      /no ice cream will actually be delivered/i
+    await waitForElementToBeRemoved(() =>
+      screen.queryByText(/no ice cream will actually be delivered/i)
     );
-    expect(nullPopoverAgain).not.toBeInTheDocument();
   });
 });
