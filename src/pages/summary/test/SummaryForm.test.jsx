@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import SummaryForm from "../SummaryForm";
+import userEvent from "@testing-library/user-event";
 
 describe("Form Tests", () => {
   it("should render checkbox and button in inital state", () => {
@@ -24,10 +25,10 @@ describe("Form Tests", () => {
       name: /confirm order/i,
     });
 
-    fireEvent.click(checkbox);
+    userEvent.click(checkbox);
     expect(confirmButton).toBeEnabled();
 
-    fireEvent.click(checkbox);
+    userEvent.click(checkbox);
     expect(confirmButton).toBeDisabled();
   });
 });
